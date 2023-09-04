@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wp-pvc
+  name: frontend
   labels:
-    app: wordpress
+    app: frontend
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,41 +14,41 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress
+  name: frontend
   labels:
-    app: wordpress
+    app: frontend
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: frontend
       tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: frontend
         tier: frontend
     spec:
       containers:
       - image: wordpress:4.8-apache
-        name: wordpress
+        name: frontend
         env:
-        - name: WORDPRESS_DB_HOST
-          value: wordpress-mysql
-        - name: WORDPRESS_DB_PASSWORD
+        - name: frontend_DB_HOST
+          value: frontend-mysql
+        - name: frontend_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-pass
               key: password
         ports:
         - containerPort: 80
-          name: wordpress
+          name: frontend
         volumeMounts:
-        - name: wordpress-persistent-storage
+        - name: frontend-persistent-storage
           mountPath: /var/www/html
       volumes:
-      - name: wordpress-persistent-storage
+      - name: frontend-persistent-storage
         persistentVolumeClaim:
           claimName: wp-pvc
 ---
@@ -56,14 +56,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: wordpress
-  name: wordpress
+    app: frontend
+  name: frontend
 spec:
   ports:
   - port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    app: wordpress
+    app: frontend
     tier: frontend
   type: LoadBalancer

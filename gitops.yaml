@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: manifests
-    repoURL: https://https://github.com/abdimalik2010/PaaS-solution-on-azure
+    repoURL: https://github.com/abdimalik2010/PaaS-solution-on-azure.git
     targetRevision: main
   syncPolicy:
     automated:
