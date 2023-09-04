@@ -9,20 +9,19 @@ on:
       - 'modules/**'
   pull_request:
 
-
 jobs:
   CI:
-    # Continuous Integration job
     name: Continuous Integration
     runs-on: ubuntu-latest
     env:
-      # Environment variables for CI jobs
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
     steps:
+      - name: Azure Login
+        run: az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Terraform
@@ -36,7 +35,6 @@ jobs:
           terraform plan -input=false -var "ARM_CLIENT_SECRET=${{ env.ARM_CLIENT_SECRET }}"
 
   tfsec:
-    # Tfsec - Security Scan job
     name: Tfsec - Security Scan
     runs-on: ubuntu-latest
     steps:
@@ -48,19 +46,19 @@ jobs:
           soft_fail: true
 
   CD:
-    # Continuous Deployment job
     name: Continuous Deployment
     needs: [tfsec, CI]
     runs-on: ubuntu-latest
     if: ${{ needs.tfsec.result == 'success' }}
     env:
-      # Environment variables for CD jobs
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
     steps:
+      - name: Azure Login
+        run: az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Terraform
@@ -75,6 +73,7 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -var "ARM_CLIENT_SECRET=${{ env.ARM_CLIENT_SECRET }}"
+
         
   
      
