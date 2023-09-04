@@ -49,8 +49,6 @@ module "kubernetes_cluster" {
   dns_prefix          = "aks-cluster"
   vnet_subnet_id      = module.subnet.subnet
 
-
-
 }
 
 module "kubernetes_cluster_node_pool" {
@@ -67,6 +65,7 @@ module "acr" {
   sku                 = "Standard"
   admin_enabled       = false
 }
+
 module "acr_aks_assignment" {
   source           = "./modules/acr-aks-assignment"
   acr_id           = module.acr.acr_id
