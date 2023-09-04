@@ -1,0 +1,5 @@
+*.ftvars
+*.terraform.*
+*.tfstate
+*.config
+*terraform/
