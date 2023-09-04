@@ -64,6 +64,7 @@ module "acr" {
   location            = module.resource_group.location
   sku                 = "Standard"
   admin_enabled       = false
+  
 }
 
 module "acr_aks_assignment" {
