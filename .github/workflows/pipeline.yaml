@@ -33,8 +33,7 @@ jobs:
         run: terraform init
       - name: Terraform plan
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key-pair.pub
-          terraform plan -input=false -var "ARM_CLIENT_SECRET=${{ env.ARM_CLIENT_SECRET }}"
+          terraform plan
 
   tfsec:
     # Tfsec - Security Scan job
