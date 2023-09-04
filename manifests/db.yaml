@@ -2,16 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: wordpress
+    app: backend
     app.kubernetes.io/instance: app-argocd
-  name: wordpress-mysql
+  name: backend-mysql
 spec:
   ports:
   - port: 3306
     protocol: TCP
     targetPort: 3306
   selector:
-    app: wordpress
+    app: backend
     tier: mysql
   type: ClusterIP
 ---
@@ -20,7 +20,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
   labels:
-    app: wordpress
+    app: backend
 spec:
   accessModes:
     - ReadWriteOnce
@@ -31,20 +31,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress-mysql
+  name: backend-mysql
   labels:
-    app: wordpress
+    app: backend
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: backend
       tier: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: backend
         tier: mysql
     spec:
       containers:

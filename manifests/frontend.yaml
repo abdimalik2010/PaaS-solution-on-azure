@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: frontend
+  name: wp-pvc
   labels:
     app: frontend
 spec:
@@ -34,9 +34,9 @@ spec:
       - image: wordpress:4.8-apache
         name: frontend
         env:
-        - name: frontend_DB_HOST
-          value: frontend-mysql
-        - name: frontend_DB_PASSWORD
+        - name: WORDPRESS_DB_HOST
+          value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-pass
