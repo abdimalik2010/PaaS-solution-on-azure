@@ -65,6 +65,7 @@ module "acr" {
   sku                 = "Standard"
   admin_enabled       = false
 }
+
 module "acr_aks_assignment" {
   source           = "./modules/acr-aks-assignment"
   acr_id           = module.acr.acr_id
