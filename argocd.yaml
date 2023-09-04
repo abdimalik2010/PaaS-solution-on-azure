@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: manifests
-    repoURL: https://github.com/abdimalik2010/Cloud-Native-DevOps-Azure-Kubernetes-Terraform-GitOps
+    repoURL: https://https://github.com/abdimalik2010/PaaS-solution-on-azure
     targetRevision: main
   syncPolicy:
     automated:
